@@ -1,6 +1,7 @@
 public class LogEntry
 {
     public string? UniqueFileIDRef { get; set; } // string 255
+    public string? LogLevel { get; set; } // string 255
     public string? HostName { get; set; } // string 255
     public string? Area { get; set; } // string 255
     //public DateTime Date { get; set; } // datetimeutc

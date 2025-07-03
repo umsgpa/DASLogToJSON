@@ -3,6 +3,7 @@ public class LogHeader
     public string? UniqueFileID { get; set; }
     public string? CustomerName { get; set; }
     public string? HostName { get; set; }
+    public bool NLogType { get; set; }
     public string? Area { get; set; }
     public long LogEntriesCount { get; set; }
     public DateTime StartTime { get; set; }

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
+      "projectUniqueName": "C:\\GitHubRepo\\DASLogToJSON_NLOG\\DASLogToJSON.csproj",
       "projectName": "DASLogToJSON",
-      "projectPath": "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
+      "projectPath": "C:\\GitHubRepo\\DASLogToJSON_NLOG\\DASLogToJSON.csproj",
       "packagesPath": "C:\\Users\\itgp\\.nuget\\packages\\",
-      "outputPath": "C:\\GitHubRepo\\DASLogToJSON\\obj\\",
+      "outputPath": "C:\\GitHubRepo\\DASLogToJSON_NLOG\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\itgp\\AppData\\Roaming\\NuGet\\NuGet.Config"

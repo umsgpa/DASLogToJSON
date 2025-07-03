@@ -6,7 +6,7 @@
         "request": "launch",
         "preLaunchTask": "build",
         "program": "${workspaceFolder}/bin/Debug/net6.0/DASLogToJSON.exe",
-        "args": ["--logfolder=F:\\SmartSup\\testing\\", "--mongodbextjson=no", "--notes=\"my test notes\"", "--customername=\"test customer\"", "--hostname=\"lello.splendor.net\""],
+        "args": ["--logfolder=C:\\GitHubRepo\\DASLogToJSON_NLOG\\bin\\Debug\\net6.0", "--mongodbextjson=no", "--notes=\"my test notes\"", "--customername=\"test customer\"", "--hostname=\"lello.splendor.net\""],
         "cwd": "${workspaceFolder}",
         "stopAtEntry": false,
         "console": "internalConsole"

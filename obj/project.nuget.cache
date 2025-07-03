@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HkQb6+cG6ru29tNIBlFxqD0G52cRnvu56ivqOKYRl5bgjRT+fLIO7UZpIbmE2Nz8NEXfzS0tm+HpFRBlqse0Mw==",
+  "dgSpecHash": "QWfCp8BdLn29ndQBjkb/ytHEw3+gQK9bmGMsd/yJoG/GLs5OY25VI6ZCjcIx0oIE9ODgrZuiiGHYVyIMugKdRA==",
   "success": true,
-  "projectFilePath": "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
+  "projectFilePath": "C:\\GitHubRepo\\DASLogToJSON_NLOG\\DASLogToJSON.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

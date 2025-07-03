@@ -20,9 +20,14 @@ public class LogParser
 
     public static string rx_LogFile = @"(^(.*[^_])_([^_]+)_(\d{8})(?=\.log$)|^([^_]+)_(\d{8})(?=\.log$))";
     public static string rx_tagsline = @"-\s*(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?";
-    public static string rx_timeseparator = @"^\d{2}[:|.]\d{2}[:|.]\d{2} - ";
+    public static string rx_tagslineNLog =  @"(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?";
+    public static string rx_timeseparator = @"^\d{2}[:|.]\d{2}[:|.]\d{2}";
+
+
+
     public static List<string> ExtractLogEntries(string filePath)
     {
+
         var logEntries = new List<string>();
 
         try
@@ -86,7 +91,7 @@ public class LogParser
             --mongotyping
         
         */
-        
+    bool NLogType = false; // NLog Type
 
         var parser = new DASLogToJSON.CommandLineArguments();
                 if (!parser.Parse(args))
@@ -206,19 +211,37 @@ public class LogParser
                 }
 
 
+                
                 foreach (var entry in logEntries)
+                {
+                    linenumber++;
+                    bool isNLogEntryType;
+
+                Debug.WriteLine($"Check Pipe Char: " + entry.Substring(8, 1)  +"");
+
+                    if (entry.Substring(8, 1) == "|")
                     {
-                        linenumber++;
+                        isNLogEntryType = true;
+                        NLogType = isNLogEntryType;
+                    }
+                    else
+                    {
+                        isNLogEntryType = false;
+                        NLogType = isNLogEntryType; // Reset NLogType for non-NLog entries
+                    }
 
-                        // string patterntagsline = @"\[([^\]]+)\]"; //@"(\[(\w+|\s+)\])+";
-                        // string patterntagsline = @"-\s*\[([^\]]+)\](?:\s*\[([^\]]+)\])?"; // ONLY VALUES
-                        // string patterntagsline = @"-\s*(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?"; // VALUES AND BRACKETS
-                        string tag1 = string.Empty;
-                        string tag2 = string.Empty;
 
+                    // string patterntagsline = @"\[([^\]]+)\]"; //@"(\[(\w+|\s+)\])+";
+                    // string patterntagsline = @"-\s*\[([^\]]+)\](?:\s*\[([^\]]+)\])?"; // ONLY VALUES
+                    // string patterntagsline = @"-\s*(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?"; // VALUES AND BRACKETS
+                    string tag1 = string.Empty;
+                    string tag2 = string.Empty;
+
+                    
+
+                    if (!isNLogEntryType)
+                    {
                         Regex regexLineTags = new Regex(rx_tagsline);
-
-
                         Match matchd = regexLineTags.Match(entry);
                         if (matchd.Success)
                         {
@@ -232,18 +255,51 @@ public class LogParser
                                 tag2 = string.Empty;
                             }
                         }
-
-                        if (IsMessageCenter)
+                    }
+                    else
+                    {
+                        //  Console.WriteLine($"NLog Entry: {entry}");
+                        //  Console.WriteLine($"NLog Entry: {entry.Substring(15, entry.Length - 15)}");
+                        Regex regexLineTags = new Regex(rx_tagslineNLog);
+                        Match matchd = regexLineTags.Match(entry.Substring(15, entry.Length - 15)); // Skip the first 16 characters for NLog entries
+                        if (matchd.Success)
                         {
-                            tag1 = tag1override; // Override tag1 with the prefix if it's a MessageCenter log
-                        }
+                            tag1 = matchd.Groups[1].Value;
+                            if (matchd.Groups[2].Success)
+                            {
+                                tag2 = matchd.Groups[2].Value;
+                            }
+                            else
+                            {
+                                tag2 = string.Empty;
+                            }
+                        }                        
+                    }
+
+
+
+                    if (IsMessageCenter)
+                    {
+                        tag1 = tag1override; // Override tag1 with the prefix if it's a MessageCenter log
+                    }
 
 
                     hostname = parser.Param_HostName != string.Empty ? parser.Param_HostName : hostname;
 
-                    myObjectList.Add(new LogEntry
+
+
+
+ 
+                    
+
+                    // Adapting the parsing logic based on whether it's an NLog entry or not
+                    if (!isNLogEntryType)
+                    {
+                        // Old DIGISTAT < 10.x Style log entry
+                        myObjectList.Add(new LogEntry
                         {
                             UniqueFileIDRef = uniqueid.ToString(),
+                            LogLevel = null,
                             HostName = hostname,
                             Area = prefix,
                             //  Date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture),
@@ -253,8 +309,30 @@ public class LogParser
                             Tag2 = tag2,
                             Content = entry.Substring(11, entry.Length - 11)
                         });
-
                     }
+                    else
+                    {
+                        // New DIGISTAT >=10.x Style NLog entry
+                        myObjectList.Add(new LogEntry
+                        {
+                            UniqueFileIDRef = uniqueid.ToString(),
+                            LogLevel = entry.Substring(9, 5).Trim(),
+                            HostName = hostname,
+                            Area = prefix,
+                            //  Date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture),
+                            Sequence = linenumber,
+                            DateTime = DateTime.ParseExact($"{date}T" + entry.Substring(0, 8).Replace(".", ":"), "yyyyMMddTHH:mm:ss", CultureInfo.InvariantCulture),
+                            Tag1 = tag1,
+                            Tag2 = tag2,
+                            Content = entry.Substring(15, entry.Length - 15)
+                        });
+                    }
+
+
+
+
+
+                } // foreach (var entry in logEntries)
 
                 /*
                                     // Assuming you have your JsonSerializerOptions defined
@@ -308,6 +386,7 @@ public class LogParser
                 Console.WriteLine($"Header File {logHeader.HeaderFile}");
                 Console.WriteLine($"Input file: {logHeader.InputFile}");
                 Console.WriteLine($"Output file: {logHeader.OutputFile}");
+                Console.WriteLine($"Log entry NLog: {NLogType.ToString()} ");
                 Console.WriteLine($"Host Name: {logHeader.HostName}");
                 Console.WriteLine($"Area: {logHeader.Area}"); 
                 Console.WriteLine($"Number of log entries: {logHeader.LogEntriesCount}");
