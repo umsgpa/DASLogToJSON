@@ -1,0 +1,1 @@
+.\DASLogToJSON.exe --logfolder="F:\SmartSup\Logs\D1" --mongodbextjson=no --notes="D1 folder" --customername="Istituto Ortopedico Rizzoli" --hostname="DIGISERVERIOR01"
