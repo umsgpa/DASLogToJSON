@@ -1,0 +1,106 @@
+
+using System;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+public class LogParser
+{
+    /// <summary>
+    /// Extracts multi-line log entries that start with a timestamp pattern
+    /// </summary>
+    /// <param name="filePath">Path to the log file</param>
+    /// <returns>List of multi-line log entries</returns>
+    public static List<string> ExtractLogEntries(string filePath)
+    {
+        var logEntries = new List<string>();
+        
+        try
+        {
+            // Regular expression to match lines starting with timestamp pattern
+            var timestampPattern = @"^\d{2}:\d{2}:\d{2} - ";
+            
+            using (var reader = new StreamReader(filePath))
+            {
+                string? line;
+                StringBuilder? currentEntry = null;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // Check if the line starts with the timestamp pattern
+                    if (Regex.IsMatch(line, timestampPattern))
+                    {
+                        // If we were building a previous entry, add it to the list
+                        if (currentEntry != null)
+                        {
+                            logEntries.Add(currentEntry.ToString().Trim());
+                        }
+
+                        // Start a new entry
+                        currentEntry = new StringBuilder(line);
+                    }
+                    else if (currentEntry != null)
+                    {
+                        // If we're in the middle of an entry, append the line
+                        currentEntry.AppendLine(line);
+                    }
+                }
+
+                // Add the last entry if exists
+                if (currentEntry != null)
+                {
+                    logEntries.Add(currentEntry.ToString().Trim());
+                }
+            }
+
+            return logEntries;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading log file: {ex.Message}");
+            return logEntries;
+        }
+    }
+
+    // Example usage
+    public static void Main(string[] args)
+    {
+        string logFilePath =  @"F:\SmartSup\Logs\DAS3_20250314.log"; //@"F:\SmartSup\Logs\src1\DAS3_20250509.log";
+        string folderPath =  @"F:\SmartSup\Logs\"; 
+
+         List<string> fileNames = new List<string>();
+
+         // Enumerate files in the folder
+        foreach (string file in Directory.EnumerateFiles(folderPath, "*.log"))
+        {
+            string fileName = Path.GetFileName(file);
+            if (IsValidFileName(fileName))
+            {
+                fileNames.Add(fileName);
+            }
+        }
+        
+        try
+        {
+            var entries = ExtractLogEntries(logFilePath);
+            
+            Console.WriteLine($"Found {entries.Count} log entries:");
+            foreach (var entry in entries)
+            {
+                Console.WriteLine("---");
+                Console.WriteLine(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+
+        static bool IsValidFileName(string fileName)
+    {
+        // Check if the file name matches the structure {prefixname}_yyyyMMdd.log
+        string pattern = @"(^\w+)(_)(\d{8})\.log$";
+        return System.Text.RegularExpressions.Regex.IsMatch(fileName, pattern);
+    }
+}

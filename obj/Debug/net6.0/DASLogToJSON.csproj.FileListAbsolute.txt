@@ -1,0 +1,15 @@
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.csproj.AssemblyReference.cache
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.GeneratedMSBuildEditorConfig.editorconfig
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.AssemblyInfoInputs.cache
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.AssemblyInfo.cs
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.csproj.CoreCompileInputs.cache
+c:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0\DASLogToJSON.exe
+C:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0\DASLogToJSON.deps.json
+C:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0\DASLogToJSON.runtimeconfig.json
+c:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0\DASLogToJSON.dll
+c:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0\DASLogToJSON.pdb
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.dll
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\refint\DASLogToJSON.dll
+c:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.pdb
+C:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\DASLogToJSON.genruntimeconfig.cache
+C:\GitHubRepo\DASLogToJSON\obj\Debug\net6.0\ref\DASLogToJSON.dll

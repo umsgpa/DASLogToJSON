@@ -1,0 +1,52 @@
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+
+class Program
+{
+    static void Main()
+    {
+        string logFilePath = "path/to/your/logfile.log";
+        List<string> logEntries = ExtractLogEntries(logFilePath);
+
+        foreach (var entry in logEntries)
+        {
+            Console.WriteLine(entry);
+            Console.WriteLine(new string('-', 40)); // Separator for readability
+        }
+    }
+
+    static List<string> ExtractLogEntries(string logFilePath)
+    {
+        List<string> entries = new List<string>();
+        List<string> currentEntry = new List<string>();
+        Regex pattern = new Regex(@"^\d{2}:\d{2}:\d{2} - ");
+
+        foreach (string line in File.ReadLines(logFilePath))
+        {
+            if (pattern.IsMatch(line))
+            {
+                if (currentEntry.Count > 0)
+                {
+                    entries.Add(string.Join(Environment.NewLine, currentEntry));
+                    currentEntry.Clear();
+                }
+                currentEntry.Add(line);
+            }
+            else
+            {
+                currentEntry.Add(line);
+            }
+        }
+
+        // Add the last entry if there's any
+        if (currentEntry.Count > 0)
+        {
+            entries.Add(string.Join(Environment.NewLine, currentEntry));
+        }
+
+        return entries;
+    }
+}
