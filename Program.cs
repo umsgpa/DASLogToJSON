@@ -76,7 +76,7 @@ public class LogParser
     public static void Main(string[] args)
     {
         //string logFilePath =  @"F:\SmartSup\Logs\DAS3_20250314.log"; //@"F:\SmartSup\Logs\src1\DAS3_20250509.log";
-        string folderPath =  @"F:\SmartSup\Logs\";
+       // string folderPath =  @"F:\SmartSup\Logs\";
         /*
 
             --logfolder
@@ -88,6 +88,15 @@ public class LogParser
         */
         
 
+        var parser = new DASLogToJSON.CommandLineArguments();
+                if (!parser.Parse(args))
+                {
+                    return;
+                }
+
+       string? folderPath = parser.Param_LogFolder;
+       bool isMongoDBExtJSON = parser.Param_MongoDBExtJSON;
+
         Console.WriteLine("DAS Log to JSON Converter");
         Console.WriteLine("---------------------------------------------------");
         Console.WriteLine($"Processing folder: {folderPath}");
@@ -96,7 +105,12 @@ public class LogParser
         List<string> fileNames = new List<string>();
         List<LogEntry> myObjectList = new List<LogEntry>();
 
-         // Enumerate files in the folder
+        if (folderPath == null || !Directory.Exists(folderPath))
+        {
+            Console.WriteLine("The specified folder does not exist.");
+            return;
+        }
+        // Enumerate files in the folder
         foreach (string file in Directory.EnumerateFiles(folderPath, "*.log"))
         {
             string fileName = Path.GetFileName(file);
@@ -225,7 +239,9 @@ public class LogParser
                         }
 
 
-                        myObjectList.Add(new LogEntry
+                    hostname = parser.Param_HostName != string.Empty ? parser.Param_HostName : hostname;
+
+                    myObjectList.Add(new LogEntry
                         {
                             UniqueFileIDRef = uniqueid.ToString(),
                             HostName = hostname,
@@ -262,9 +278,10 @@ public class LogParser
    
                 });
 
-
-                json = JsonTransformer.TransformDateTimeFormat(json);
-
+                if (isMongoDBExtJSON)
+                {
+                    json = JsonTransformer.TransformDateTimeFormat(json, new[] { "dateTime" }, StringComparison.Ordinal);
+                }                  
                 //Console.WriteLine(json);
                 File.WriteAllText(folderPath + fileName + ".json", json, System.Text.Encoding.UTF8);
 
@@ -272,6 +289,7 @@ public class LogParser
 
                 LogHeader logHeader = new LogHeader(
                     uniqueid.ToString(),
+                    parser.Param_CustomerName,
                     hostname,
                     prefix,
                     myObjectList.Count,
@@ -282,7 +300,9 @@ public class LogParser
                     folderPath + fileName.Replace(".log","_header.log") + ".json",
                     SystemInfo.GetFullHostname(),
                     SystemInfo.GetCurrentUserWithDomain(),
-                    SystemInfo.GetOperatingSystemVersion()
+                    SystemInfo.GetOperatingSystemVersion(),
+                    parser.Param_Notes
+                    
                 );
 
                 Console.WriteLine($"Header File {logHeader.HeaderFile}");
@@ -301,7 +321,13 @@ public class LogParser
                     WriteIndented = true,
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
-                
+
+
+                if (isMongoDBExtJSON)
+                {
+                    headerJson = JsonTransformer.TransformDateTimeFormat(headerJson, new[] { "startTime" }, StringComparison.Ordinal);
+                }
+
                 //Console.WriteLine(json);
                 File.WriteAllText(folderPath + fileName.Replace(".log","_header.log.json"), headerJson, System.Text.Encoding.UTF8);
 /*

@@ -5,24 +5,27 @@ using System.Text.Json.Nodes;
 
 public class JsonTransformer
 {
-    public static string TransformDateTimeFormat(string originalJson)
+    public static string TransformDateTimeFormat(
+        string originalJson, 
+        IEnumerable<string> propertyNames,
+        StringComparison comparisonType = StringComparison.OrdinalIgnoreCase)
     {
-        // Parse the JSON into a JsonNode (which can be an array or object)
         var jsonNode = JsonNode.Parse(originalJson);
-        
+        var propertyNameSet = new HashSet<string>(propertyNames, StringComparer.FromComparison(comparisonType));
+
         if (jsonNode is JsonArray jsonArray)
         {
             foreach (var item in jsonArray)
             {
                 if (item is JsonObject jsonObject)
                 {
-                    TransformDateTimeProperty(jsonObject);
+                    TransformDateTimeProperties(jsonObject, propertyNameSet);
                 }
             }
         }
         else if (jsonNode is JsonObject singleObject)
         {
-            TransformDateTimeProperty(singleObject);
+            TransformDateTimeProperties(singleObject, propertyNameSet);
         }
         
         return jsonNode != null 
@@ -30,22 +33,22 @@ public class JsonTransformer
             : string.Empty;
     }
 
-    private static void TransformDateTimeProperty(JsonObject jsonObject)
+    private static void TransformDateTimeProperties(JsonObject jsonObject, HashSet<string> propertyNames)
     {
-        if (jsonObject.TryGetPropertyValue("dateTime", out var dateTimeNode) && 
-            dateTimeNode != null)
+        // Get all property names that match our target names
+        foreach (var propertyName in propertyNames)
         {
-            // Get the original date string
-            string originalDate = dateTimeNode.ToString();
-            
-            // Create the new date object structure
-            var newDateObject = new JsonObject
+            if (jsonObject.TryGetPropertyValue(propertyName, out var dateNode) && 
+                dateNode != null)
             {
-                ["$date"] = originalDate
-            };
-            
-            // Replace the original value with the new structure
-            jsonObject["dateTime"] = newDateObject;
+                if (dateNode is JsonValue jsonValue && jsonValue.TryGetValue<string>(out var dateString) && dateString != null)
+                {
+                    jsonObject[propertyName] = new JsonObject
+                    {
+                        ["$date"] = dateString
+                    };
+                }
+            }
         }
     }
 }
