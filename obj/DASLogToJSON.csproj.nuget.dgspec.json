@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj": {}
+    "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj": {}
   },
   "projects": {
-    "c:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj": {
+    "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
+        "projectUniqueName": "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
         "projectName": "DASLogToJSON",
-        "projectPath": "c:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
+        "projectPath": "C:\\GitHubRepo\\DASLogToJSON\\DASLogToJSON.csproj",
         "packagesPath": "C:\\Users\\itgp\\.nuget\\packages\\",
-        "outputPath": "c:\\GitHubRepo\\DASLogToJSON\\obj\\",
+        "outputPath": "C:\\GitHubRepo\\DASLogToJSON\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\itgp\\AppData\\Roaming\\NuGet\\NuGet.Config"
