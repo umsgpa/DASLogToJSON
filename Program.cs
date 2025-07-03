@@ -23,7 +23,7 @@ public class LogParser
     public static string rx_tagslineNLog =  @"(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?";
     public static string rx_timeseparator = @"^\d{2}[:|.]\d{2}[:|.]\d{2}";
 
-
+ 
 
     public static List<string> ExtractLogEntries(string filePath)
     {
@@ -365,10 +365,32 @@ public class LogParser
 
                 TimeSpan elapsedTimeSeconds = DateTime.Now - startTime;
 
+                string? swversionfinal = "unknown";
+
+                if (parser.Param_SWVersion == string.Empty || parser.Param_SWVersion == null)
+                {
+                    switch (NLogType)
+                    {
+                        case true:
+                            swversionfinal = ">= 10.0.0.0";
+                            break;
+                        case false:
+                            swversionfinal = "< 10.0.0.0";
+                            break;
+                    }
+                }
+                else
+                {
+                    swversionfinal = parser.Param_SWVersion;
+                }
+
+
                 LogHeader logHeader = new LogHeader(
                     uniqueid.ToString(),
                     parser.Param_CustomerName,
                     hostname,
+                    swversionfinal,
+                    NLogType,
                     prefix,
                     myObjectList.Count,
                     startTime,
