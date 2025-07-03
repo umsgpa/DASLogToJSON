@@ -18,8 +18,9 @@ public class LogParser
     
 
 
-    public static string rxLogFile = @"(^(.*[^_])_([^_]+)_(\d{8})(?=\.log$)|^([^_]+)_(\d{8})(?=\.log$))";
+    public static string rx_LogFile = @"(^(.*[^_])_([^_]+)_(\d{8})(?=\.log$)|^([^_]+)_(\d{8})(?=\.log$))";
     public static string rx_tagsline = @"-\s*(\[[^\]]+\])(?:\s*(\[[^\]]+\]))?";
+    public static string rx_timeseparator = @"^\d{2}[:|.]\d{2}[:|.]\d{2} - ";
     public static List<string> ExtractLogEntries(string filePath)
     {
         var logEntries = new List<string>();
@@ -27,7 +28,7 @@ public class LogParser
         try
         {
             // Regular expression to match lines starting with timestamp pattern
-            var timestampPattern = @"^\d{2}[:|.]\d{2}[:|.]\d{2} - ";
+            //var timestampPattern = @"^\d{2}[:|.]\d{2}[:|.]\d{2} - ";
 
             using (var reader = new StreamReader(filePath))
             {
@@ -37,7 +38,7 @@ public class LogParser
                 while ((line = reader.ReadLine()) != null)
                 {
                     // Check if the line starts with the timestamp pattern
-                    if (Regex.IsMatch(line, timestampPattern))
+                    if (Regex.IsMatch(line, rx_timeseparator))
                     {
                         // If we were building a previous entry, add it to the list
                         if (currentEntry != null)
@@ -76,7 +77,15 @@ public class LogParser
     {
         //string logFilePath =  @"F:\SmartSup\Logs\DAS3_20250314.log"; //@"F:\SmartSup\Logs\src1\DAS3_20250509.log";
         string folderPath =  @"F:\SmartSup\Logs\";
+        /*
 
+            --logfolder
+            --hostname
+            --customername
+            --notes
+            --mongotyping
+        
+        */
         
 
         Console.WriteLine("DAS Log to JSON Converter");
@@ -132,7 +141,7 @@ public class LogParser
 
                 Debug.WriteLine($"Processing file: {fileName}");
           
-                Match match = Regex.Match(fileName, rxLogFile, RegexOptions.IgnoreCase);
+                Match match = Regex.Match(fileName, rx_LogFile, RegexOptions.IgnoreCase);
 
                 Debug.WriteLine($"Match: " + match.Groups.Count +"");
 
@@ -218,7 +227,7 @@ public class LogParser
 
                         myObjectList.Add(new LogEntry
                         {
-                            FileID = uniqueid.ToString(),
+                            UniqueFileIDRef = uniqueid.ToString(),
                             HostName = hostname,
                             Area = prefix,
                             //  Date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture),
@@ -231,6 +240,19 @@ public class LogParser
 
                     }
 
+                /*
+                                    // Assuming you have your JsonSerializerOptions defined
+                                    var jsonSerializerOptions = new JsonSerializerOptions
+                                    {
+                                        WriteIndented = true,
+                                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase // Use camelCase for property names
+                                        // Add other options as needed, e.g., PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                                    };
+                */
+
+
+
+
 
                 string json = JsonSerializer.Serialize(myObjectList, new JsonSerializerOptions
                 {
@@ -241,12 +263,12 @@ public class LogParser
                 });
 
 
-
+                json = JsonTransformer.TransformDateTimeFormat(json);
 
                 //Console.WriteLine(json);
                 File.WriteAllText(folderPath + fileName + ".json", json, System.Text.Encoding.UTF8);
 
-                TimeSpan elapsedTime = DateTime.Now - startTime;
+                TimeSpan elapsedTimeSeconds = DateTime.Now - startTime;
 
                 LogHeader logHeader = new LogHeader(
                     uniqueid.ToString(),
@@ -254,10 +276,13 @@ public class LogParser
                     prefix,
                     myObjectList.Count,
                     startTime,
-                    elapsedTime.TotalSeconds,
+                    elapsedTimeSeconds.TotalSeconds,
                     folderPath + fileName,
                     folderPath + fileName + ".json",
-                    folderPath + fileName.Replace(".log","_header.log") + ".json"
+                    folderPath + fileName.Replace(".log","_header.log") + ".json",
+                    SystemInfo.GetFullHostname(),
+                    SystemInfo.GetCurrentUserWithDomain(),
+                    SystemInfo.GetOperatingSystemVersion()
                 );
 
                 Console.WriteLine($"Header File {logHeader.HeaderFile}");
@@ -267,7 +292,7 @@ public class LogParser
                 Console.WriteLine($"Area: {logHeader.Area}"); 
                 Console.WriteLine($"Number of log entries: {logHeader.LogEntriesCount}");
                 Console.WriteLine($"Unique file ID: {logHeader.UniqueFileID}");
-                Console.WriteLine($"Elapsed time: {logHeader.ElapsedTime} seconds");
+                Console.WriteLine($"Elapsed time: {logHeader.ElapsedTimeSeconds} seconds");
                 
                 Console.WriteLine("---------------------------------------------------");
 
@@ -325,6 +350,6 @@ public class LogParser
     {
         // Check if the file name matches the structure {prefixname}_yyyyMMdd.log
         // string pattern = @"(^\w+)(_)(\d{8})\.log$";
-        return System.Text.RegularExpressions.Regex.IsMatch(fileName, rxLogFile, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        return System.Text.RegularExpressions.Regex.IsMatch(fileName, rx_LogFile, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     }
 }
