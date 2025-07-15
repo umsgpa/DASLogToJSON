@@ -1,3 +1,4 @@
+
 DIGISTAT log files are typically generated on a daily basis and follow a standard naming convention, such as:
 
 `{SystemArea}_{yyyyMMdd}.log`
@@ -62,23 +63,24 @@ The first file contains only the extracted and structured log data, these are th
 The second file includes additional information useful for identifying the context of the log file, such as the customer name, optional descriptive notes, and other metadata relevant for traceability and analysis.
 
 **{SystemArea}_{yyyyMMdd}.log.json**
-
-`[`
-  `{`
-    `"uniqueFileIDRef": "68552e54b3624a5c68a63c74",`
-    `"logLevel": "TRACE",`
-    `"hostName": "SRVDIGISTAT",`
-    `"area": "DAS3",`
-    `"sequence": 7,`
-    `"dateTime": "2025-06-19T12:08:24",`
-    `"tag1": "[UMSMessageCenterClient]",`
-    `"tag2": "",`
-    `"content": "[UMSMessageCenterClient] Connection to Message Center successfully, try authorization"`
-  `},`
-  `{`
-        `...`
-  `},`
-`]`  
+```json
+[
+  {
+    "uniqueFileIDRef": "68552e54b3624a5c68a63c74",
+    "logLevel": "TRACE",
+    "hostName": "SRVDIGISTAT",
+    "area": "DAS3",
+    "sequence": 7,
+    "dateTime": "2025-06-19T12:08:24",
+    "tag1": "[UMSMessageCenterClient]",
+    "tag2": "",
+    "content": "[UMSMessageCenterClient] Connection to Message Center successfully, try authorization"
+  },
+  {
+    ...
+  }
+]
+```
   
 
 | **Field**         | **Description**                                                                                                                                                                                                                                                             |
@@ -94,29 +96,29 @@ The second file includes additional information useful for identifying the conte
 | `content`         | Log entry full text                                                                                                                                                                                                                                                         |
 
 **{SystemArea}_{yyyyMMdd}_header.log.json**
+```json
+{
+  "uniqueFileID": "68552e54b3624a5c68a63c74",
+  "customerName": "MY CUSTOMER",
+  "hostName": "SRVDIGISTAT",
+  "swVersion": "\u003E= 10.0.0.0",
+  "nLogType": true,
+  "area": "DAS3",
+  "logEntriesCount": 147,
+  "startTime": "2025-06-20T11:48:04.1265938+02:00",
+  "elapsedTimeSeconds": 0.0106744,
+  "inputFile": ".\\DAS3_20250619.log",
+  "outputFile": ".\\DAS3_20250619.log.json",
+  "headerFile": ".\\DAS3_20250619_header.log.json",
+  "creatorHostName": "ITFLO-H725.mydomain.com",
+  "creatorUserName": "MYDOMAIN\\gpancani",
+  "creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",
+  "creatorNotes": "My notes related my logs files and reason to collect these info"
+}
+```
 
-`{`
-  `"uniqueFileID": "68552e54b3624a5c68a63c74",`
-  `"customerName": "MY CUSTOMER",`
-  `"hostName": "SRVDIGISTAT",`
-  `"swVersion": "\u003E= 10.0.0.0",`
-  `"nLogType": true,`
-  `"area": "DAS3",`
-  `"logEntriesCount": 147,`
-  `"startTime": "2025-06-20T11:48:04.1265938+02:00",`
-  `"elapsedTimeSeconds": 0.0106744,`
-  `"inputFile": ".\\DAS3_20250619.log",`
-  `"outputFile": ".\\DAS3_20250619.log.json",`
-  `"headerFile": ".\\DAS3_20250619_header.log.json",`
-  `"creatorHostName": "ITFLO-H725.ascom-ws.com",`
-  `"creatorUserName": "ASCOM-WS\\itgp",`
-  `"creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",`
-  `"creatorNotes": "My notes related my logs files and reason to collect these info"`
-`}`
-
-
-| Field                  | Description                                                                                                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Field                    | Description                                                                                                        |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | `uniqueFileIDRef`        | Refer to the Unique file identifier                                                                                |
 | `customerName`           | Customer and/or System name                                                                                        |
 | `hostName`               | Source host name                                                                                                   |
