@@ -28,13 +28,13 @@ To reconstruct a complete and coherent log record, it is necessary to combine in
 
 Key elements to consider include:
 
--          System Area (DAS3, DBv2, MessageCenter, etc.)
+- System Area (DAS3, DBv2, MessageCenter, etc.)
 
--          File date (yyyyMMdd)
+- File date (yyyyMMdd)
 
--          Timestamp (HH:mm:ss)
+- Timestamp (HH:mm:ss)
 
--          Log message content (both single-line and/or multi-line)
+- Log message content (both single-line and/or multi-line)
 
 After a thorough analysis of the log files, it was possible to precisely identify the timestamp and the delimiter that separates it from the log message.
 
