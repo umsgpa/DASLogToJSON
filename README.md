@@ -1,4 +1,3 @@
-
 DIGISTAT log files are typically generated on a daily basis and follow a standard naming convention, such as:
 
 `{SystemArea}_{yyyyMMdd}.log`
