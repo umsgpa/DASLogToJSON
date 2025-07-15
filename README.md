@@ -28,19 +28,19 @@ To reconstruct a complete and coherent log record, it is necessary to combine in
 
 Key elements to consider include:
 
--          System Area (DAS3, DBv2, MessageCenter, etc.)
+-          System Area (DAS3, DBv2, MessageCenter, etc.)
 
--          File date (yyyyMMdd)
+-          File date (yyyyMMdd)
 
--          Timestamp (HH:mm:ss)
+-          Timestamp (HH:mm:ss)
 
--          Log message content (both single-line and/or multi-line)
+-          Log message content (both single-line and/or multi-line)
 
 After a thorough analysis of the log files, it was possible to precisely identify the timestamp and the delimiter that separates it from the log message.
 
-Within the log message itself, there are often one or two distinctive elements that further characterize the entry based on the system area. These elements are optional, may appear consecutively (up to two), and help to specialize the content of the log. For example:           
+Within the log message itself, there are often one or two distinctive elements that further characterize the entry based on the system area. These elements are optional, may appear consecutively (up to two), and help to specialize the content of the log. For example:           
 
-`{HH:mm:ss}{ – }<[category] log entry record …>{cr}{lf}`    
+`{HH:mm:ss}{ – }<[category] log entry record …>{cr}{lf}`    
 
 or
 
@@ -52,10 +52,10 @@ These elements are useful for filtering and are referred to as _tag1_ and _tag2_
 
 Now that the structure of DIGISTAT log files has been clarified, we can describe how the DASLogToJSON utility functions.
 
-This command-line tool takes a .log file that follows the expected structure and generates two output files with the same base name as the original log file:       
+This command-line tool takes a .log file that follows the expected structure and generates two output files with the same base name as the original log file:       
 
--          `{SystemArea}_{yyyyMMdd}.log.json`
--          `{SystemArea}_{yyyyMMdd}_header.log.json`
+-          `{SystemArea}_{yyyyMMdd}.log.json`
+-          `{SystemArea}_{yyyyMMdd}_header.log.json`
 
 The first file contains only the extracted and structured log data, these are the actual log entries.
 
@@ -96,22 +96,22 @@ The second file includes additional information useful for identifying the conte
 **{SystemArea}_{yyyyMMdd}_header.log.json**
 ```json
 {
-  "uniqueFileID": "68552e54b3624a5c68a63c74",
-  "customerName": "MY CUSTOMER",
-  "hostName": "SRVDIGISTAT",
-  "swVersion": "\u003E= 10.0.0.0",
-  "nLogType": true,
-  "area": "DAS3",
-  "logEntriesCount": 147,
-  "startTime": "2025-06-20T11:48:04.1265938+02:00",
-  "elapsedTimeSeconds": 0.0106744,
-  "inputFile": ".\\DAS3_20250619.log",
-  "outputFile": ".\\DAS3_20250619.log.json",
-  "headerFile": ".\\DAS3_20250619_header.log.json",
-  "creatorHostName": "ITFLO-H725.mydomain.com",
-  "creatorUserName": "MYDOMAIN\\gpancani",
-  "creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",
-  "creatorNotes": "My notes related my logs files and reason to collect these info"
+    "uniqueFileID": "68552e54b3624a5c68a63c74",
+    "customerName": "MY CUSTOMER",
+    "hostName": "SRVDIGISTAT",
+    "swVersion": "\u003E= 10.0.0.0",
+    "nLogType": true,
+    "area": "DAS3",
+    "logEntriesCount": 147,
+    "startTime": "2025-06-20T11:48:04.1265938+02:00",
+    "elapsedTimeSeconds": 0.0106744,
+    "inputFile": ".\\DAS3_20250619.log",
+    "outputFile": ".\\DAS3_20250619.log.json",
+    "headerFile": ".\\DAS3_20250619_header.log.json",
+    "creatorHostName": "ITFLO-H725.mydomain.com",
+    "creatorUserName": "MYDOMAIN\\gpancani",
+    "creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",
+    "creatorNotes": "My notes related my logs files and reason to collect these info"
 }
 ```
 
@@ -142,7 +142,7 @@ DASLogToJSON accepts several command-line parameters that must be provided to su
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--logfolder`      | (Required) Specifies the path to the .log files that need to be converted.                                                                                                                                              |
 | `--hostname`       | (Optional) Overrides the host name if it is not included as a prefix in the file name.                                                                                                                                  |
-| `--swversion`      | (Optional but recommended) Indicates the software version in the format x.y.z.w such as: 9.2.3.1 or 10.0.0.1 etc.<br><br>f omitted, the version will be automatically inferred as eithe: “>= 10.0.0.0” or  “< 10.0.0.0” |
+| `--swversion`      | (Optional but recommended) Indicates the software version in the format x.y.z.w such as: 9.2.3.1 or 10.0.0.1 etc.<br><br>f omitted, the version will be automatically inferred as eithe: “>= 10.0.0.0” or  “< 10.0.0.0” |
 | `--customername`   | (Optional) Specifies the name of the customer or system.                                                                                                                                                                |
 | `--notes`          | (Optional) Allows the user to add descriptive notes.                                                                                                                                                                    |
 | `--mongodbextjson` | (Optional) If set, converts the dateTime field into a MongoDB-compatible date format.                                                                                                                                   |
