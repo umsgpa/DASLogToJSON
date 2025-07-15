@@ -53,9 +53,10 @@ These elements are useful for filtering and are referred to as _tag1_ and _tag2_
 Now that the structure of DIGISTAT log files has been clarified, we can describe how the DASLogToJSON utility functions.
 
 This command-line tool takes a .log file that follows the expected structure and generates two output files with the same base name as the original log file:       
-
--          `{SystemArea}_{yyyyMMdd}.log.json`
--          `{SystemArea}_{yyyyMMdd}_header.log.json`
+```
+- {SystemArea}_{yyyyMMdd}.log.json
+- {SystemArea}_{yyyyMMdd}_header.log.json
+```
 
 The first file contains only the extracted and structured log data, these are the actual log entries.
 
