@@ -8,22 +8,22 @@ Another naming format, not native but commonly used by technical support teams a
 `{HostName}_{SystemArea}_{yyyyMMdd}.log`
 
 Inside each file, log entries follow a well-defined structure, typically formatted as:
-
-`{HH:mm:ss}{ – }<log entry record 1>{cr}{lf}`    
-`{HH:mm:ss}{ – }<log entry record 2>{cr}{lf}`    
-`{HH:mm:ss}{ – }<log entry record …>{cr}{lf}`    
-`{HH:mm:ss}{ – }<log entry record _n_>{cr}{lf}`
-
+```
+{HH:mm:ss}{ – }<log entry record 1>{cr}{lf}    
+{HH:mm:ss}{ – }<log entry record 2>{cr}{lf}    
+{HH:mm:ss}{ – }<log entry record …>{cr}{lf}    
+{HH:mm:ss}{ – }<log entry record _n_>{cr}{lf}
+```
 or multi-line:
-
-`{HH:mm:ss}{ – }<log entry record 1 line 1>{cr}{lf}`   
-`<log entry record 1 line 2>{cr}{lf}`     
-`<log entry record 1 line …>{cr}{lf}`     
-`<log entry record 1 line n>{cr}{lf}`     
-`{HH:mm:ss}{ – }<log entry record 2>{cr}{lf}`    
-`{HH:mm:ss}{ – }<log entry record …>{cr}{lf}`    
-`{HH:mm:ss}{ – }<log entry record _n_>{cr}{lf}`
-
+```
+{HH:mm:ss}{ – }<log entry record 1 line 1>{cr}{lf}   
+<log entry record 1 line 2>{cr}{lf}     
+<log entry record 1 line …>{cr}{lf}     
+<log entry record 1 line n>{cr}{lf}     
+{HH:mm:ss}{ – }<log entry record 2>{cr}{lf}    
+{HH:mm:ss}{ – }<log entry record …>{cr}{lf}    
+{HH:mm:ss}{ – }<log entry record _n_>{cr}{lf}
+```
 To reconstruct a complete and coherent log record, it is necessary to combine information from both the file name and the content within the file.
 
 Key elements to consider include:
@@ -55,7 +55,6 @@ Now that the structure of DIGISTAT log files has been clarified, we can describe
 This command-line tool takes a .log file that follows the expected structure and generates two output files with the same base name as the original log file:       
 
 -          `{SystemArea}_{yyyyMMdd}.log.json`
-
 -          `{SystemArea}_{yyyyMMdd}_header.log.json`
 
 The first file contains only the extracted and structured log data, these are the actual log entries.
@@ -82,7 +81,6 @@ The second file includes additional information useful for identifying the conte
 ]
 ```
   
-
 | **Field**         | **Description**                                                                                                                                                                                                                                                             |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `uniqueFileIDRef` | Unique file identifier, used to link with the corresponding header file                                                                                                                                                                                                     |
@@ -98,22 +96,22 @@ The second file includes additional information useful for identifying the conte
 **{SystemArea}_{yyyyMMdd}_header.log.json**
 ```json
 {
-    "uniqueFileID": "68552e54b3624a5c68a63c74",
-    "customerName": "MY CUSTOMER",
-    "hostName": "SRVDIGISTAT",
-    "swVersion": "\u003E= 10.0.0.0",
-    "nLogType": true,
-    "area": "DAS3",
-    "logEntriesCount": 147,
-    "startTime": "2025-06-20T11:48:04.1265938+02:00",
-    "elapsedTimeSeconds": 0.0106744,
-    "inputFile": ".\\DAS3_20250619.log",
-    "outputFile": ".\\DAS3_20250619.log.json",
-    "headerFile": ".\\DAS3_20250619_header.log.json",
-    "creatorHostName": "ITFLO-H725.mydomain.com",
-    "creatorUserName": "MYDOMAIN\\gpancani",
-    "creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",
-    "creatorNotes": "My notes related my logs files and reason to collect these info"
+  "uniqueFileID": "68552e54b3624a5c68a63c74",
+  "customerName": "MY CUSTOMER",
+  "hostName": "SRVDIGISTAT",
+  "swVersion": "\u003E= 10.0.0.0",
+  "nLogType": true,
+  "area": "DAS3",
+  "logEntriesCount": 147,
+  "startTime": "2025-06-20T11:48:04.1265938+02:00",
+  "elapsedTimeSeconds": 0.0106744,
+  "inputFile": ".\\DAS3_20250619.log",
+  "outputFile": ".\\DAS3_20250619.log.json",
+  "headerFile": ".\\DAS3_20250619_header.log.json",
+  "creatorHostName": "ITFLO-H725.mydomain.com",
+  "creatorUserName": "MYDOMAIN\\gpancani",
+  "creatorOperatingSystem": "Windows Microsoft Windows NT 10.0.19045.0",
+  "creatorNotes": "My notes related my logs files and reason to collect these info"
 }
 ```
 
@@ -151,30 +149,35 @@ DASLogToJSON accepts several command-line parameters that must be provided to su
 
 ## Command-Line Example
 
-`.\DASLogToJSON.exe --logfolder="X:\LogToAnalyse\Customers\UK London\Royal London Hospital" --customername="UK | London | Royal London Hospital" --hostname="srvtest01.rl.nhs.uk" --notes="acquisition stops around midnight" --mongodbextjson=no`
-
+```
+.\DASLogToJSON.exe --logfolder="X:\LogToAnalyse\Customers\UK London\Royal London Hospital" --customername="UK | London | Royal London Hospital" --hostname="srvtest01.rl.nhs.uk" --notes="acquisition stops around midnight" --mongodbextjson=no
+```
 ## Example of application launch
 
-`C:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0>.\DASLogToJSON.exe --logfolder="F:\LogToAnalyse\Customers\UK London\Royal London Hospital" --customername="UK | London | Royal London Hospital" --hostname="srvtest01.rl.nhs.uk" --notes="acquisition stops around midnight" --mongodbextjson=no`
+```
+C:\GitHubRepo\DASLogToJSON\bin\Debug\net6.0>.\DASLogToJSON.exe --logfolder="F:\LogToAnalyse\Customers\UK London\Royal London Hospital" --customername="UK | London | Royal London Hospital" --hostname="srvtest01.rl.nhs.uk" --notes="acquisition stops around midnight" --mongodbextjson=no
+```
 
-`DAS Log to JSON Converter`
-`---------------------------------------------------`
-`Header File F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626_header.log.json`
-`Input file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626.log`
-`Output file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626.log.json`
-`Log entry NLog: True`
-`Host Name: srvtest01.rl.nhs.uk`
-`Area: DAS3`
-`Number of log entries: 808`
-`Unique file ID: 6874f65931f98d45cc154aae`
-`Elapsed time: 0.0233343 seconds`
-`---------------------------------------------------`
-`Header File F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626_header.log.json`
-`Input file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626.log`
-`Output file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626.log.json`
-`Log entry NLog: True`
-`Host Name: srvtest01.rl.nhs.uk`
-`Area: DBv2`
-`Number of log entries: 13`
-`Unique file ID: 6874f65931f98d45cc154ab0`
-`Elapsed time: 0.0019599 seconds`
+```
+DAS Log to JSON Converter
+---------------------------------------------------
+Header File F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626_header.log.json
+Input file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626.log
+Output file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DAS3_20250626.log.json
+Log entry NLog: True
+Host Name: srvtest01.rl.nhs.uk
+Area: DAS3
+Number of log entries: 808
+Unique file ID: 6874f65931f98d45cc154aae
+Elapsed time: 0.0233343 seconds
+---------------------------------------------------
+Header File F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626_header.log.json
+Input file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626.log
+Output file: F:\LogToAnalyse\Customers\UK London\Royal London Hospital\DBv2_20250626.log.json
+Log entry NLog: True
+Host Name: srvtest01.rl.nhs.uk
+Area: DBv2
+Number of log entries: 13
+Unique file ID: 6874f65931f98d45cc154ab0
+Elapsed time: 0.0019599 seconds
+```
